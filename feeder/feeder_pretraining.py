@@ -72,7 +72,6 @@ class Feeder(torch.utils.data.Dataset):
         data_numpy = np.array(self.data[index])
         
         number_of_frames = self.number_of_frames[index]
-
         # apply spatio-temporal augmentations to generate  view 1 
 
         # temporal crop-resize

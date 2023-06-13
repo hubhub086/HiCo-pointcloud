@@ -18,16 +18,16 @@ class GetPointEmbeddingModel(nn.Module):
         self.sa2 = PointNetSetAbstractionMsg(64, [0.2, 0.4, 0.8], [32, 64, 128], 320, [[64, 64, 128], [128, 128, 256], [128, 128, 256]])
         self.sa3 = PointNetSetAbstraction(None, None, None, 640 + 3, [256, 512, 512], True)
 
-        # self.udm1 = nn.Sequential(
-        #         nn.Conv1d(in_channels=320, out_channels=512, kernel_size=4),
-        #         nn.ReLU(),
-        #         nn.MaxPool1d(kernel_size=128-4+1)
-        #     )
-        # self.udm2 = nn.Sequential(
-        #     nn.Conv1d(in_channels=640, out_channels=512, kernel_size=5),
-        #     nn.ReLU(),
-        #     nn.MaxPool1d(kernel_size=64 - 5 + 1)
-        # )
+        self.udm1 = nn.Sequential(
+                nn.Conv1d(in_channels=320, out_channels=512, kernel_size=4),
+                nn.ReLU(),
+                nn.MaxPool1d(kernel_size=128-4+1)
+            )
+        self.udm2 = nn.Sequential(
+            nn.Conv1d(in_channels=640, out_channels=512, kernel_size=5),
+            nn.ReLU(),
+            nn.MaxPool1d(kernel_size=64 - 5 + 1)
+        )
 
     def forward(self, xyz):
         B, _, _ = xyz.shape

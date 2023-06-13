@@ -51,8 +51,8 @@ parser.add_argument('--seed', default=47, type=int,
 parser.add_argument('--checkpoint-path', default='./checkpoints', type=str)
 parser.add_argument('--skeleton-representation', default='joint', type=str,
                     help='input skeleton-representation  for self supervised training (joint or motion or bone)')
-parser.add_argument('--pre-dataset', default='ntu60', type=str,
-                    help='which dataset to use for self supervised training (ntu60 or ntu120)')
+parser.add_argument('--pre-dataset', default='pointcloud', type=str,
+                    help='which dataset to use for self supervised training (ntu60 or ntu120 or pointcloud)')
 parser.add_argument('--protocol', default='cross_subject', type=str,
                     help='traiining protocol cross_view/cross_subject/cross_setup')
 

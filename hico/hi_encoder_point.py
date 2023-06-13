@@ -96,7 +96,7 @@ class PretrainingEncoder_point(nn.Module):
                  encoder,
                  num_class=60,
                  ):
-        super(PretrainingEncoder, self).__init__()
+        super(PretrainingEncoder_point, self).__init__()
 
         self.d_model = hidden_size
 

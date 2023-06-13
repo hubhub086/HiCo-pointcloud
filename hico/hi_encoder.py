@@ -16,7 +16,7 @@ class UDM(nn.Module):
     """Unified Donwsampling Module"""
     def __init__(self, in_channels, out_channels, kernel_size, stride, padding, factor) -> None:
         super().__init__()
-        self.conv = DepthWiseConv(in_channels,kernel_size,stride,padding)
+        self.conv = DepthWiseConv(in_channels, kernel_size, stride, padding)
         self.norm = nn.LayerNorm(out_channels)
         self.relu = nn.ReLU(True)
         self.maxpooling = nn.MaxPool1d(factor)

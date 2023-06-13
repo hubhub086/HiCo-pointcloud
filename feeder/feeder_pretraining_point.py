@@ -69,7 +69,6 @@ class Feeder_pointcloud(torch.utils.data.Dataset):
         data_numpy = np.array(self.data[index])
 
         number_of_frames = self.number_of_frames[index]
-
         # apply spatio-temporal augmentations to generate  view 1
 
         # temporal crop-resize
@@ -78,7 +77,7 @@ class Feeder_pointcloud(torch.utils.data.Dataset):
                                                                self.input_size)
         data_numpy_v1_crop = data_numpy_v1_crop.transpose(1, 2, 0)  # CTV to TVC
         # print(f"data_numpy v1 crop = {data_numpy_v1_crop.shape}")
-        data_numpy_v1_crop = provider.normalize_data(data_numpy_v1_crop)
+        # data_numpy_v1_crop = provider.normalize_data(data_numpy_v1_crop)
 
         # randomly select one of the spatial augmentations
         flip_prob = random.random()
@@ -95,7 +94,7 @@ class Feeder_pointcloud(torch.utils.data.Dataset):
                                                                self.input_size)
         data_numpy_v2_crop = data_numpy_v2_crop.transpose(1, 2, 0)  # CTV to TVC
 
-        data_numpy_v2_crop = provider.normalize_data(data_numpy_v2_crop)
+        # data_numpy_v2_crop = provider.normalize_data(data_numpy_v2_crop)
 
         # randomly select  one of the spatial augmentations
         flip_prob = random.random()
