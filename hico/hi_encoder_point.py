@@ -51,21 +51,27 @@ class HiEncoder(nn.Module):
             self.t_encoder.flatten_parameters()
             self.s_encoder.flatten_parameters()
 
-        # embedding --> N*T*D
-        N, T, _, _ = xc.shape
-        xc1, xc2, xc3 = self.t_embedding(xc[0, :, :, :].squeeze())  # temporal domain
-        xp1, xp2, xp3 = self.s_embedding(xp[0, :, :, :].squeeze())  # spatial domain
-        for n in range(1, N):
-            xc1_n, xc2_n, xc3_n = self.t_embedding(xc[n, :, :, :])  # temporal domain
-            xp1_n, xp2_n, xp3_n = self.s_embedding(xp[n, :, :, :])  # spatial domain
-            xc1 = torch.cat([xc1, xc1_n], dim=0)
-            xc2 = torch.cat([xc2, xc2_n], dim=0)
-            xc3 = torch.cat([xc3, xp3_n], dim=0)
-            xp1 = torch.cat([xp1, xp1_n], dim=0)
-            xp2 = torch.cat([xp2, xp2_n], dim=0)
-            xp3 = torch.cat([xp3, xp3_n], dim=0)
+        ## embedding --> N*T*D
+        print(f"xc.shape = {xc.shape}")
+        N, T, C, V = xc.shape
+        # xc1, xc2, xc3 = self.t_embedding(xc[0, :, :, :].squeeze())  # temporal domain
+        # xp1, xp2, xp3 = self.s_embedding(xp[0, :, :, :].squeeze())  # spatial domain
+        # for n in range(1, N):
+        #     xc1_n, xc2_n, xc3_n = self.t_embedding(xc[n, :, :, :])  # temporal domain
+        #     xp1_n, xp2_n, xp3_n = self.s_embedding(xp[n, :, :, :])  # spatial domain
+        #     xc1 = torch.cat([xc1, xc1_n], dim=0)
+        #     xc2 = torch.cat([xc2, xc2_n], dim=0)
+        #     xc3 = torch.cat([xc3, xp3_n], dim=0)
+        #     xp2 = torch.cat([xp2, xp2_n], dim=0)
+        #     xp1 = torch.cat([xp1, xp1_n], dim=0)
+        #     xp3 = torch.cat([xp3, xp3_n], dim=0)
+        xc1, xc2, xc3 = self.t_embedding(xc.reshape(N*T, C, V))  # temporal domain
+        xp1, xp2, xp3 = self.s_embedding(xp.reshape(N*T, C, V))  # spatial domain
+        xc1, xc2, xc3 = xc1.reshape(N, T, -1), xc2.reshape(N, T, -1), xc3.reshape(N, T, -1)
+        xp1, xp2, xp3 = xp1.reshape(N, T, -1), xp2.reshape(N, T, -1), xp3.reshape(N, T, -1)
 
-        # # max pooling --> N*1*D
+
+        ## max pooling --> N*1*D
         # xc1, xc2, xc3 = torch.max(xc1, dim=1)[0], torch.max(xc2, dim=1)[0], torch.max(xc3, dim=1)[0]
         # xp1, xp2, xp3 = torch.max(xp1, dim=1)[0], torch.max(xp2, dim=1)[0], torch.max(xp3, dim=1)[0]
 
@@ -218,6 +224,8 @@ if __name__ == "__main__":
     # )
     # qc, qp, qt, qs, qi = model(xc, xp)
     model = HiEncoder(
+        t_input_size=None, s_input_size=None,
+        kernel_size=None, stride=None, padding=None, factor=None,
         hidden_size=512,
         num_head=4,
         num_layer=1,
