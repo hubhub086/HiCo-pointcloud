@@ -52,7 +52,7 @@ class HiEncoder(nn.Module):
             self.s_encoder.flatten_parameters()
 
         ## embedding --> N*T*D
-        print(f"xc.shape = {xc.shape}")
+        # print(f"xc.shape = {xc.shape}")
         N, T, C, V = xc.shape
         # xc1, xc2, xc3 = self.t_embedding(xc[0, :, :, :].squeeze())  # temporal domain
         # xp1, xp2, xp3 = self.s_embedding(xp[0, :, :, :].squeeze())  # spatial domain
@@ -212,8 +212,8 @@ class DownstreamEncoder(nn.Module):
 
 
 if __name__ == "__main__":
-    xc = torch.rand(8, 32, 3, 4096)
-    xp = torch.rand(8, 32, 3, 4096)
+    xc = torch.rand(2, 32, 3, 4096)
+    xp = torch.rand(2, 32, 3, 4096)
     # model = PretrainingEncoder(
     #     hidden_size=512,
     #     num_head=4,

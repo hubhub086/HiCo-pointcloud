@@ -56,7 +56,7 @@ def index_points(points, idx):
     repeat_shape = list(idx.shape)
     repeat_shape[0] = 1
     batch_indices = torch.arange(B, dtype=torch.long).to(device).view(view_shape).repeat(repeat_shape)
-    new_points = points[batch_indices, idx, :]
+    new_points = points[batch_indices, idx-1, :]
     return new_points
 
 

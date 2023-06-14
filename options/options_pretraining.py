@@ -11,12 +11,13 @@ encoder_arguments = {
     "hidden_size": 512,
     "num_head": 4,
     "num_layer": 1,
-    "granularity": 4,
+    "granularity": 3,
     "encoder": "Transformer",
     "num_class": 128
  }
 
 data_path = "../HiCo-data"
+# data_path = "/root/autodl-tmp/HiCo-data"
 
 class opts_pointcloud():
     def __init__(self):

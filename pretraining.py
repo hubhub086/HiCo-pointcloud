@@ -17,6 +17,8 @@ from torch.utils.tensorboard import SummaryWriter
 from dataset import get_pretraining_set_pointcloud, get_pretraining_set_intra
 from losses import MultiPositiveInfoNCE
 
+from torchsummary import summary
+
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
@@ -27,7 +29,7 @@ parser.add_argument('--epochs', default=101, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
-parser.add_argument('-b', '--batch-size', default=2, type=int,
+parser.add_argument('-b', '--batch-size', default=1, type=int,
                     metavar='N',
                     help='mini-batch size (default: 256), this is the total '
                          'batch size of all GPUs on the current node when '
@@ -48,7 +50,8 @@ parser.add_argument('--resume', default='', type=str, metavar='PATH',
 parser.add_argument('--seed', default=47, type=int,
                     help='seed for initializing training. ')
 
-parser.add_argument('--checkpoint-path', default='./checkpoints', type=str)
+parser.add_argument('--checkpoint-path', default='./checkpoints', type=str,
+                    help="/root/autodl-tmp/hico-point-checkpoints or ./checkpoints")
 parser.add_argument('--skeleton-representation', default='joint', type=str,
                     help='input skeleton-representation  for self supervised training (joint or motion or bone)')
 parser.add_argument('--pre-dataset', default='pointcloud', type=str,
@@ -114,6 +117,9 @@ def main():
     
     # single gpu training
     model = model.cuda()
+
+    # summary(model, [(10, 3, 512),(10, 3, 512),(10, 3, 512),(10, 3, 512)], batch_size=1, device="cuda")
+    # exit()
 
     criterion1 = nn.CrossEntropyLoss().cuda()
     criterion2 = MultiPositiveInfoNCE().cuda()
@@ -195,6 +201,7 @@ def train(train_loader, model, criterion1, criterion2, optimizer, epoch, args):
         qp_input = qp_input.float().cuda(non_blocking=True)
         kc_input = kc_input.float().cuda(non_blocking=True)
         kp_input = kp_input.float().cuda(non_blocking=True)
+        # print(qc_input.shape)
         # compute output
         output1, output2, output3, output4, output5, target1, target2, target3,  target4, target5, \
             = model(qc_input, qp_input, kc_input, kp_input)
