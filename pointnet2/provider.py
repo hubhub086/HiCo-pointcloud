@@ -181,8 +181,8 @@ def rotate_perturbation_point_cloud(batch_data, angle_sigma=0.06, angle_clip=0.1
           BxNx3 array, rotated batch of point clouds
     """
     rotated_data = np.zeros(batch_data.shape, dtype=np.float32)
+    angles = np.clip(angle_sigma * np.random.randn(3), -angle_clip, angle_clip)
     for k in range(batch_data.shape[0]):
-        angles = np.clip(angle_sigma*np.random.randn(3), -angle_clip, angle_clip)
         Rx = np.array([[1,0,0],
                        [0,np.cos(angles[0]),-np.sin(angles[0])],
                        [0,np.sin(angles[0]),np.cos(angles[0])]])
@@ -221,7 +221,7 @@ def shift_point_cloud(batch_data, shift_range=0.1):
     B, N, C = batch_data.shape
     shifts = np.random.uniform(-shift_range, shift_range, (B,3))
     for batch_index in range(B):
-        batch_data[batch_index,:,:] += shifts[batch_index,:]
+        batch_data[batch_index,:,:] += shifts[0,:]
     return batch_data
 
 
@@ -235,14 +235,14 @@ def random_scale_point_cloud(batch_data, scale_low=0.8, scale_high=1.25):
     B, N, C = batch_data.shape
     scales = np.random.uniform(scale_low, scale_high, B)
     for batch_index in range(B):
-        batch_data[batch_index, :, :] *= scales[batch_index]
+        batch_data[batch_index, :, :] *= scales[0]
     return batch_data
 
 def random_point_dropout(batch_pc, max_dropout_ratio=0.875):
     ''' batch_pc: BxNx3 '''
+    dropout_ratio = np.random.random() * max_dropout_ratio  # 0~0.875
+    drop_idx = np.where(np.random.random((batch_pc.shape[1])) <= dropout_ratio)[0]
     for b in range(batch_pc.shape[0]):
-        dropout_ratio = np.random.random()*max_dropout_ratio  # 0~0.875
-        drop_idx = np.where(np.random.random((batch_pc.shape[1])) <= dropout_ratio)[0]
         if len(drop_idx) > 0:
             batch_pc[b, drop_idx, :] = batch_pc[b, 0, :]  # set to the first point
     return batch_pc

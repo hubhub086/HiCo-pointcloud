@@ -2,6 +2,7 @@ import time
 import torch
 
 import numpy as np
+import os
 
 np.set_printoptions(threshold=np.inf)
 import random
@@ -11,7 +12,7 @@ try:
     from feeder.pointcloud_augmentations import *
 except:
     from pointcloud_augmentations import *
-
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 class Feeder_pointcloud(torch.utils.data.Dataset):
     """
@@ -77,7 +78,7 @@ class Feeder_pointcloud(torch.utils.data.Dataset):
                                                                self.input_size)
         data_numpy_v1_crop = data_numpy_v1_crop.transpose(1, 2, 0)  # CTV to TVC
         # print(f"data_numpy v1 crop = {data_numpy_v1_crop.shape}")
-        # data_numpy_v1_crop = provider.normalize_data(data_numpy_v1_crop)
+        data_numpy_v1_crop = provider.normalize_data(data_numpy_v1_crop)
 
         # randomly select one of the spatial augmentations
         flip_prob = random.random()
@@ -90,11 +91,11 @@ class Feeder_pointcloud(torch.utils.data.Dataset):
         # apply spatio-temporal augmentations to generate  view 2
 
         # temporal crop-resize
-        data_numpy_v2_crop = temporal_cropresize(data_numpy, number_of_frames, self.l_ratio,
+        data_numpy_v2_crop = temporal_cropresize2(data_numpy, number_of_frames, self.l_ratio,
                                                                self.input_size)
         data_numpy_v2_crop = data_numpy_v2_crop.transpose(1, 2, 0)  # CTV to TVC
 
-        # data_numpy_v2_crop = provider.normalize_data(data_numpy_v2_crop)
+        data_numpy_v2_crop = provider.normalize_data(data_numpy_v2_crop)
 
         # randomly select  one of the spatial augmentations
         flip_prob = random.random()
@@ -128,8 +129,8 @@ class Feeder_pointcloud(torch.utils.data.Dataset):
 
 if __name__ == "__main__":
     dataset = Feeder_pointcloud(
-        data_path='../HiCo-data/pr_dataset_pointcloud/train_data_point.npy',
-        num_frame_path='../HiCo-data/pr_dataset_pointcloud/train_num_frame.npy',
+        data_path='../../HiCo-data/pr_dataset_pointcloud/train_data_point.npy',
+        num_frame_path='../../HiCo-data/pr_dataset_pointcloud/train_num_frame.npy',
         l_ratio=[0.1, 1],
         input_size=32,
         input_representation='joint',

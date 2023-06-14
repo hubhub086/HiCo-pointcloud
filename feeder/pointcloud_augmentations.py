@@ -72,6 +72,14 @@ def temporal_cropresize(input_data, num_of_frames, l_ratio, output_size):
 
     return temporal_context
 
+def temporal_cropresize2(input_data, num_of_frames, l_ratio, output_size):
+    """将时间序列均分分成n等分并随机抽取n帧"""
+    C, T, V = input_data.shape
+    block_num = num_of_frames / output_size
+    idx = np.random.randint(block_num, size=output_size) + int(block_num)*np.arange(output_size)
+    temporal_context = input_data[:, idx, :]
+    return temporal_context
+
 
 def crop_subsequence(input_data, num_of_frames, l_ratio, output_size):
     C, T, V, M = input_data.shape

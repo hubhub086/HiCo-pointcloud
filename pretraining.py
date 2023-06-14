@@ -29,7 +29,7 @@ parser.add_argument('--epochs', default=101, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
-parser.add_argument('-b', '--batch-size', default=1, type=int,
+parser.add_argument('-b', '--batch-size', default=16, type=int,
                     metavar='N',
                     help='mini-batch size (default: 256), this is the total '
                          'batch size of all GPUs on the current node when '
@@ -54,7 +54,7 @@ parser.add_argument('--checkpoint-path', default='./checkpoints', type=str,
                     help="/root/autodl-tmp/hico-point-checkpoints or ./checkpoints")
 parser.add_argument('--skeleton-representation', default='joint', type=str,
                     help='input skeleton-representation  for self supervised training (joint or motion or bone)')
-parser.add_argument('--pre-dataset', default='pointcloud', type=str,
+parser.add_argument('--pre-dataset', default='ntu60', type=str,
                     help='which dataset to use for self supervised training (ntu60 or ntu120 or pointcloud)')
 parser.add_argument('--protocol', default='cross_subject', type=str,
                     help='traiining protocol cross_view/cross_subject/cross_setup')
@@ -71,7 +71,7 @@ parser.add_argument('--hico-t', default=0.07, type=float,
 
 parser.add_argument('--cos', action='store_true',
                     help='use cosine lr schedule')
-
+log_file = './' + str(int(time.time())) + '.txt'
 
 def main():
     args = parser.parse_args()
@@ -117,9 +117,6 @@ def main():
     
     # single gpu training
     model = model.cuda()
-
-    # summary(model, [(10, 3, 512),(10, 3, 512),(10, 3, 512),(10, 3, 512)], batch_size=1, device="cuda")
-    # exit()
 
     criterion1 = nn.CrossEntropyLoss().cuda()
     criterion2 = MultiPositiveInfoNCE().cuda()
@@ -277,13 +274,12 @@ class ProgressMeter(object):
         self.batch_fmtstr = self._get_batch_fmtstr(num_batches)
         self.meters = meters
         self.prefix = prefix
-        self.log_file = log_path + str(int(time.time())) + '.txt'
 
     def display(self, batch):
         entries = [self.prefix + self.batch_fmtstr.format(batch)]
         entries += [str(meter) for meter in self.meters]
         print('\t'.join(entries), flush=True)
-        with open(self.log_file, 'a') as f:
+        with open(log_file, 'a') as f:
             f.writelines('\t'.join(entries)+'\n')
 
 
