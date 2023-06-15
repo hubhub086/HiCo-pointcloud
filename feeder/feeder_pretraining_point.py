@@ -74,7 +74,7 @@ class Feeder_pointcloud(torch.utils.data.Dataset):
 
         # temporal crop-resize
         # input_size=n时相当于随机选取连续n帧，实际帧数少于n时使用双线性插值补齐
-        data_numpy_v1_crop = temporal_cropresize(data_numpy, number_of_frames, self.l_ratio,
+        data_numpy_v1_crop = temporal_cropresize2(data_numpy, number_of_frames, self.l_ratio,
                                                                self.input_size)
         data_numpy_v1_crop = data_numpy_v1_crop.transpose(1, 2, 0)  # CTV to TVC
         # print(f"data_numpy v1 crop = {data_numpy_v1_crop.shape}")
