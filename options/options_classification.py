@@ -1,4 +1,4 @@
-data_path = "./HiCo-data"
+data_path = "../HiCo-data"
 
 class  opts_ntu_60_cross_view():
 
@@ -17,7 +17,7 @@ class  opts_ntu_60_cross_view():
     "num_layer":2,
     "granularity":4,
     "encoder":"Transformer",
-    "num_class":60
+    "num_class":128
     }
   
     # feeder
@@ -55,7 +55,7 @@ class  opts_ntu_60_cross_subject():
     "num_layer":1,
     "granularity":4,
     "encoder":"Transformer",
-    "num_class":60
+    "num_class":128
     }
 
     # feeder

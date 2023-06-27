@@ -1,7 +1,7 @@
 # Sequence based model arguments
 encoder_arguments = {
-   "t_input_size": 1536,
-   "s_input_size": 192,
+   "t_input_size": 150,
+   "s_input_size": 24,
     # "t_input_size": 12288,
     # "s_input_size": 12288,
     "kernel_size": 5,
@@ -11,7 +11,7 @@ encoder_arguments = {
     "hidden_size": 512,
     "num_head": 4,
     "num_layer": 1,
-    "granularity": 3,
+    "granularity": 4,
     "encoder": "Transformer",
     "num_class": 128
  }
@@ -54,7 +54,7 @@ class opts_ntu_60_cross_subject():  # default
             "data_path": data_path + "/NTU-RGB-D-60-AGCN/xsub/train_data_joint.npy",
             "num_frame_path": data_path + "/NTU-RGB-D-60-AGCN/xsub/train_num_frame.npy",
             "l_ratio": [0.1, 1],
-            "input_size": 64
+            "input_size": 8
    }
 
 

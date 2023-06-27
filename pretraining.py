@@ -111,6 +111,15 @@ def main():
     model = hico.builder.HiCo(opts.encoder_args, args.hico_dim, args.hico_k, args.hico_m, args.hico_t, args.pre_dataset)
     print("options", opts.train_feeder_args)
     print(model)
+
+    # from torchviz import make_dot
+    # c = torch.randn(16, 64, 150)
+    # q = torch.randn(16, 50, 192)
+    # output1, output2, output3, output4, output5, target1, target2, target3, target4, target5, \
+    #     = model(c,q,c,q)
+    # g = make_dot(output5)
+    # g.view()
+    # exit()
     
     total = sum([param.nelement() for param in model.parameters()])
     print("Number of parameter: %.2fM" % (total/1e6))
@@ -199,6 +208,9 @@ def train(train_loader, model, criterion1, criterion2, optimizer, epoch, args):
         kc_input = kc_input.float().cuda(non_blocking=True)
         kp_input = kp_input.float().cuda(non_blocking=True)
         # print(qc_input.shape)
+        # print(qp_input.shape)
+        # print(kc_input.shape)
+        # print(kp_input.shape)
         # compute output
         output1, output2, output3, output4, output5, target1, target2, target3,  target4, target5, \
             = model(qc_input, qp_input, kc_input, kp_input)
